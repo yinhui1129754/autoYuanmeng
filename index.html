@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Webpack App</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .top {
+            height: 40px;
+        }
+
+        .top .btn {
+            width: 80px;
+            display: inline-block;
+            height: 40px;
+            margin-left: 10px;
+            margin-right: 10px;
+            text-align: center;
+            line-height: 40px;
+            background-color: rgb(6, 101, 209);
+            color: white;
+        }
+
+        .list {
+            position: absolute;
+            height: calc(100% - 40px);
+            left: 0;
+            top: 40px;
+            width: 100%;
+            overflow: auto;
+        }
+
+        .log {
+            color: #333;
+        }
+
+        .success {
+            color: #0fda20;
+        }
+
+        .error {
+            color: #ff0000;
+        }
+
+        .warn {
+            color: #fffb00;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="top">
+
+        <div class="btn" onclick="quit()">
+            退出
+        </div>
+
+        <div class="btn" onclick="go_to_farm()">
+            去农场
+        </div>
+        <div class="btn" onclick="go_to_pasture()">
+            去牧场
+        </div>
+        <div class="btn" onclick="go_to_fishpond()">
+            去鱼塘
+        </div>
+
+        <div class="btn" onclick="runLoop()">
+            挂机
+        </div>
+    </div>
+    <div class="list">
+
+    </div>
+    <script>
+        function logItem(className, str) {
+            let div = document.createElement("div");
+            div.setAttribute("class", className);
+            div.innerHTML = str;
+            document.querySelector(".list").appendChild(div);
+        }
+        function gj() {
+
+        }
+        function quit() {
+
+        }
+        function go_to_farm() {
+            ws.send(JSON.stringify({
+                type: "go_to_farm"
+            }))
+        }
+        function go_to_pasture() {
+            ws.send(JSON.stringify({
+                type: "go_to_pasture"
+            }))
+        }
+        function go_to_fishpond() {
+            ws.send(JSON.stringify({
+                type: "go_to_fishpond"
+            }))
+        }
+        function runLoop() {
+            ws.send(JSON.stringify({
+                type: "runLoop"
+            }))
+        }
+
+        var ws = new WebSocket("ws://127.0.0.1:5964");
+        ws.onopen = function (evt) {
+            console.log("Connection open ...");
+            // ws.send("Hello WebSockets!");
+        };
+
+        ws.onmessage = function (evt) {
+            console.log("Received Message: " + evt.data);
+            let json = JSON.parse(evt.data);
+            switch (json.type) {
+                case "log": {
+                    logItem("log", json.msg);
+                    break;
+                }
+                case "error": {
+                    logItem("error", json.msg);
+                    break;
+                }
+                case "warn": {
+                    logItem("warn", json.msg);
+                    break;
+                }
+                case "success": {
+                    logItem("success", json.msg);
+                    break;
+                }
+            }
+            // ws.close();
+        };
+
+        ws.onclose = function (evt) {
+            console.log("Connection closed.");
+        };
+        setInterval(() => {
+            document.querySelector(".list").innerHTML = "";
+        }, 60 * 1000 * 10)
+    </script>
+</body>
+
+</html>

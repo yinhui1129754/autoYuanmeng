@@ -1,0 +1,25 @@
+{
+  "name": "autoyuanmeng",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./dist/main.js",
+    "dev": "cross-env NODE_ENV=development webpack --config webpack.config.js --watch",
+    "build": "cross-env NODE_ENV=production webpack --config webpack.config.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@webpack-cli/generators": "^3.0.7",
+    "cross-env": "^7.0.3",
+    "lodash": "^4.17.21",
+    "ws": "^8.18.0"
+  },
+  "dependencies": {
+    "@techstark/opencv-js": "^4.9.0-release.3",
+    "pngjs": "^7.0.0",
+    "puppeteer-core": "^22.15.0",
+    "webpack": "^5.93.0"
+  }
+}
