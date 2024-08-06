@@ -15,6 +15,11 @@ export class PuppeteerCore {
                 height: config.viewHeight || 937
             }
         });
+        this.browser.on("disconnected", () => {
+            if (global.wss)
+                global.wss.close();
+
+        })
         return puppeteer;
     }
     async closeFirstPage() {

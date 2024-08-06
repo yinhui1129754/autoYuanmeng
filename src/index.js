@@ -1,7 +1,7 @@
 import { utils } from "./utils"
 import { PuppeteerCore } from "./puppeteer/core"
 import { OpenCvCore } from "./opencv/core"
-
+const { ocrSpace } = require('ocr-space-api-wrapper');
 import { WebSocketServer } from 'ws';
 import {
     go_to_farm,
@@ -16,8 +16,18 @@ let cvc = new OpenCvCore();
 global.pc = pc;
 global.cvc = cvc;
 global.ws = null;
+global.wss = null;
+
+
+
 
 (async () => {
+    let f = utils.getPath("./temp1/btn1.png")
+
+    let fB = await ocrSpace(f)
+    console.log(fB);
+
+
 
     await pc.createBrowser(config.chromePath);
     await pc.createPage()
@@ -52,6 +62,7 @@ global.ws = null;
         global.ws = ws;
     });
 
+    global.wss = wss
     await pc.createConfigPage()
     // console.log(pc.browser)
     // let img = await pc.screenshot({
