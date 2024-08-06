@@ -29,10 +29,11 @@ async function readPng(buffer, call) {
     let buf = fs.readFileSync('./ocr/pasture.png');
     readPng(buf, async (buf2) => {
         const worker = await createWorker(["chi_sim", "eng"], undefined, {
-            langPath: "./ocr/lang/"
+            langPath: "./ocr/lang",
+            corePath: "./ocr/core",
         });
         const info = await worker.recognize(buf2, "chi_sim+eng");
-        console.log(info.data.text);
+        console.log(info.data.text.split("\n"));
         await worker.terminate();
     })
 
