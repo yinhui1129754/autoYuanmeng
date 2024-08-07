@@ -41,7 +41,11 @@ def get_active_windows():
 
 windows = get_active_windows()
 for hwnd, window_title in windows:
-    print(f'{hwnd}: {window_title}')
+    try:
+        print(f'{hwnd}: {window_title}')
+    except Exception as e:
+        print(e)
+        pass
 
 def run_letsgoFarm():
     """启动多线程程序"""
