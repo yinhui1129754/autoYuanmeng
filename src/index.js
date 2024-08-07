@@ -1,13 +1,13 @@
 import { utils } from "./utils"
 import { PuppeteerCore } from "./puppeteer/core"
 import { OpenCvCore } from "./opencv/core"
-const { ocrSpace } = require('ocr-space-api-wrapper');
 import { WebSocketServer } from 'ws';
 import {
     go_to_farm,
     go_to_pasture,
     go_to_fishpond,
-    runLoop
+    runLoop,
+    screenshotTxt
 } from "./logic";
 const config = utils.readConfig(utils.getPath("./../config.json"))
 global.config = config
@@ -22,10 +22,7 @@ global.wss = null;
 
 
 (async () => {
-    let f = utils.getPath("./temp1/btn1.png")
-
-    let fB = await ocrSpace(f)
-    console.log(fB);
+    // console.log(fB);
 
 
 
@@ -63,12 +60,17 @@ global.wss = null;
     });
 
     global.wss = wss
+
     await pc.createConfigPage()
+
+    // let txts = await screenshotTxt("./use/btn1.png")
+    // console.log(txts)
     // console.log(pc.browser)
     // let img = await pc.screenshot({
     //     "path": utils.getPath("./aaa.png")
     // })
     // let templ = await cvc.readBufferFromFile(utils.getPath("./temp1/btn1.png"))
+
     // let rect = await cvc.findImgRect(img, templ)
     // let img2 = sharp(img)
 

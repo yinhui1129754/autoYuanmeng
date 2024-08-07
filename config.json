@@ -1,7 +1,7 @@
 {
     "chromePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
     "headless": false,
-    "url": "https://gamer.qq.com/v2/cloudgame/game/96897",
+    "url": "file:///D:/git/autoYuanmeng/index.html",
     "viewWidth": 1800,
     "viewHeight": 900
 }

@@ -1,4 +1,5 @@
 const { createWorker } = require('tesseract.js');
+const path = require('path');
 const PNG = require('pngjs').PNG;
 const fs = require('fs');
 
@@ -14,27 +15,26 @@ async function readPng(buffer, call) {
             img.data[idx] = parseInt(pj2);
             img.data[idx + 1] = parseInt(pj2);
             img.data[idx + 2] = parseInt(pj2);
-
-            // and reduce opacity
-            // img.data[idx + 3] = img.data[idx + 3] >> 1;
         }
     }
 
     let callBuffer = await PNG.sync.write(img);
     call && call(callBuffer)
-    fs.writeFileSync('out.png', callBuffer);
+    // fs.writeFileSync('out.png', callBuffer);
     return callBuffer
 }
 (async function () {
-    let buf = fs.readFileSync('./ocr/pasture.png');
+    console.log(__dirname)
+    let buf = fs.readFileSync(path.join(__dirname, "../dist/temp/out.png"));
     readPng(buf, async (buf2) => {
         const worker = await createWorker(["chi_sim", "eng"], undefined, {
             langPath: "./ocr/lang",
             corePath: "./ocr/core",
         });
         const info = await worker.recognize(buf2, "chi_sim+eng");
-        console.log(info.data.text.split("\n"));
+        const infos = info.data.text.split("\n");
         await worker.terminate();
+        process.send({ arrs: infos })
     })
 
 })();

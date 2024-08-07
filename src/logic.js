@@ -1,4 +1,7 @@
+import { PNG } from "pngjs";
 import { utils } from "./utils";
+import fs from "fs";
+const { fork } = require('child_process');
 
 export const msgType = {
     log: "log",
@@ -149,4 +152,31 @@ export async function runLoop() {
         print_log("下次运行：" + (loopTime - useTime) + "毫秒", msgType.success)
         await you_dang((loopTime - useTime) / 1000)
     }
+}
+export async function screenshotTxt(path) {
+    return new Promise(async (resolve, reject) => {
+        let pyautogui = global.pc;
+        let img = await pyautogui.screenshot()
+        let templ = await cvc.readBufferFromFile(utils.getPath(path))
+        let rect = await cvc.findImgRect(img, templ)
+        let png = await PNG.sync.read(img)
+        let dst = new PNG({
+            width: rect.width,
+            height: rect.height
+        })
+        try {
+            PNG.bitblt(png, dst, rect.x, rect.y, rect.width, rect.height, 0, 0)
+            let callBuffer = await PNG.sync.write(dst);
+            fs.writeFileSync(utils.getPath("./temp/out.png"), callBuffer);
+            let fk = fork(utils.getPath("./../ocr/index.js"))
+            fk.on("message", (d) => {
+                resolve(d.arrs)
+            })
+        } catch (e) {
+            console.log(e)
+            resolve([])
+        }
+
+
+    })
 }
