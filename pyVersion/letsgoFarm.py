@@ -19,7 +19,7 @@ def open_browser():
 def find_drone():
     """寻找无人机"""
     # 重置位置后，按下a键一秒钟
-    pyautogui.press("r", presses=2, interval=0.5)
+    pyautogui.press("r")
     print_log("寻找无人机")
     # print_nol("寻找无人机")
     pyautogui.keyDown("a")
@@ -31,13 +31,13 @@ def farm_work():
     """无人机前往农场"""
     find_drone()
     print_log("无人机前往农场工作")
-    pyautogui.press("q")
+    pyautogui.press("n")
 
 def pasture_work():
     """无人机前往牧场"""
     find_drone()
     print_log("无人机前往牧场工作")
-    pyautogui.press("e")
+    pyautogui.press("m")
 
 
 
@@ -64,7 +64,7 @@ def start():
         # 计算耗时
         timestamp_end = datetime.datetime.now()
         computation_time = timestamp_end - timestamp_start
-        t = 300 - computation_time.total_seconds()
+        t = 120 - computation_time.total_seconds()
         print_log(
             "本次任务耗时：{}秒，休息{}秒，".format(
                 round((computation_time).total_seconds(), 2), t
