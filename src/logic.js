@@ -9,24 +9,25 @@ export const msgType = {
     warn: "warn",
     success: "success",
 }
-export function print_log(msg, type) {
+export function printLog(msg, type) {
     ws.send(JSON.stringify({
         type: type || msgType.log,
         msg: msg || ""
     }));
 }
 
-export async function go_to_farm() {
+export async function goToFarm() {
     let nowTime = new Date().getTime();
     let pyautogui = global.pc;
     let sleep = utils.sleep;
-    print_log("等待3秒...", msgType.error)
+    // printLog("等待3秒...", msgType.error)
     for (var i = 0; i < 1; i++) {
+        printLog("等待1秒...", msgType.error)
         await utils.sleep(1)
-        print_log("等待3秒...", msgType.error)
+        // printLog("等待3秒...", msgType.error)
     }
     await pyautogui.press("r")
-    print_log("开始走到农场...")
+    printLog("开始走到农场...")
     pyautogui.keyDown("a")
     pyautogui.keyDown("w")
     await sleep(4.8)
@@ -37,42 +38,43 @@ export async function go_to_farm() {
     await sleep(0.8)
     pyautogui.keyUp("d")
 
-    print_log("到达农场", msgType.success)
+    printLog("到达农场", msgType.success)
     return new Date().getTime() - nowTime;
 }
-export async function go_to_pasture() {
+export async function goToPasture() {
     let nowTime = new Date().getTime();
     let pyautogui = global.pc;
     let sleep = utils.sleep;
-    print_log("等待3秒...", msgType.error)
+    // printLog("等待3秒...", msgType.error)
     for (var i = 0; i < 1; i++) {
+        printLog("等待1秒...", msgType.error)
         await utils.sleep(1)
-        print_log("等待3秒...", msgType.error)
+        // printLog("等待3秒...", msgType.error)
     }
     await pyautogui.press("r")
-    print_log("开始走到牧场...")
+    printLog("开始走到牧场...")
     pyautogui.keyDown("w")
     await sleep(0.8)
     pyautogui.keyDown("d")
     await sleep(1.7)
     pyautogui.keyUp("w")
     pyautogui.keyUp("d")
-    print_log("到达牧场", msgType.success)
+    printLog("到达牧场", msgType.success)
     return new Date().getTime() - nowTime;
 }
 
-export async function go_to_fishpond() {
+export async function goToFishpond() {
 
     let nowTime = new Date().getTime();
     let pyautogui = global.pc;
     let sleep = utils.sleep;
-    print_log("等待3秒...", msgType.error)
+    // printLog("等待3秒...", msgType.error)
     for (var i = 0; i < 1; i++) {
+        printLog("等待1秒...", msgType.error)
         await utils.sleep(1)
-        print_log("等待3秒...", msgType.error)
     }
     await pyautogui.press("r")
-    print_log("开始走到鱼塘...")
+    printLog("开始走到鱼塘...")
     pyautogui.keyDown("w")
     pyautogui.keyDown("a")
     await sleep(0.5)
@@ -83,14 +85,14 @@ export async function go_to_fishpond() {
     pyautogui.keyUp("d")
     await sleep(3.2)
     pyautogui.keyUp("w")
-    print_log("到达鱼塘", msgType.success)
+    printLog("到达鱼塘", msgType.success)
     return new Date().getTime() - nowTime;
 }
 
-export async function find_drone() {
+export async function findDrone() {
     let pyautogui = global.pc;
     let sleep = utils.sleep;
-    print_log("寻找无人机")
+    printLog("寻找无人机")
     await pyautogui.press("r")
     // # print_nol("寻找无人机")
     pyautogui.keyDown("a")
@@ -98,35 +100,35 @@ export async function find_drone() {
     pyautogui.keyUp("a")
 }
 
-export async function farm_work() {
+export async function farmWork() {
     let pyautogui = global.pc;
     // let sleep = utils.sleep;
-    await find_drone()
-    print_log("无人机前往农场工作")
+    await findDrone()
+    printLog("无人机前往农场工作")
     await pyautogui.press("q")
 }
-export async function pasture_work() {
+export async function pastureWork() {
     let pyautogui = global.pc;
     // let sleep = utils.sleep;
-    await find_drone()
-    print_log("无人机前往牧场工作")
+    await findDrone()
+    printLog("无人机前往牧场工作")
     await pyautogui.press("e")
 }
-export async function you_dang(n) {
+export async function wander(n) {
     let endNum = n * 1000
     let nowTime = 0
     let sleep = utils.sleep;
     while (true) {
         let random = Math.random()
         if (random > 0.0 && random <= 0.2) {
-            nowTime += await go_to_farm()
+            nowTime += await goToFarm()
         } else if (random > 0.2 && random <= 0.4) {
-            nowTime += await go_to_pasture()
+            nowTime += await goToPasture()
         } else if (random > 0.4 && random <= 0.6) {
-            nowTime += await go_to_fishpond()
+            nowTime += await goToFishpond()
         } else if (random > 0.6 && random <= 1) {
             nowTime += 3000
-            print_log("等待时间")
+            printLog("等待时间3s", msgType.error)
             await sleep(3)
         }
         nowTime += 1000
@@ -143,14 +145,14 @@ export async function runLoop() {
     let loopTime = 120 * 1000
     while (true) {
         let now = new Date().getTime()
-        await farm_work()
-        await you_dang(40)
-        await pasture_work()
-        await you_dang(25)
+        await farmWork()
+        await wander(40)
+        await pastureWork()
+        await wander(25)
         let useTime = (new Date().getTime() - now)
-        print_log("任务结束：运行时间" + (new Date().getTime() - now) + "毫秒", msgType.success)
-        print_log("下次运行：" + (loopTime - useTime) + "毫秒", msgType.success)
-        await you_dang((loopTime - useTime) / 1000)
+        printLog("任务结束：运行时间" + (new Date().getTime() - now) + "毫秒", msgType.success)
+        printLog("下次运行：" + (loopTime - useTime) + "毫秒", msgType.success)
+        await wander((loopTime - useTime) / 1000)
     }
 }
 export async function screenshotTxt(path) {

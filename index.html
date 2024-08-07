@@ -61,13 +61,13 @@
             退出
         </div>
 
-        <div class="btn" onclick="go_to_farm()">
+        <div class="btn" onclick="goToFarm()">
             去农场
         </div>
-        <div class="btn" onclick="go_to_pasture()">
+        <div class="btn" onclick="goToPasture()">
             去牧场
         </div>
-        <div class="btn" onclick="go_to_fishpond()">
+        <div class="btn" onclick="goToFishpond()">
             去鱼塘
         </div>
 
@@ -91,19 +91,19 @@
         function quit() {
 
         }
-        function go_to_farm() {
+        function goToFarm() {
             ws.send(JSON.stringify({
-                type: "go_to_farm"
+                type: "goToFarm"
             }))
         }
-        function go_to_pasture() {
+        function goToPasture() {
             ws.send(JSON.stringify({
-                type: "go_to_pasture"
+                type: "goToPasture"
             }))
         }
-        function go_to_fishpond() {
+        function goToFishpond() {
             ws.send(JSON.stringify({
-                type: "go_to_fishpond"
+                type: "goToFishpond"
             }))
         }
         function runLoop() {

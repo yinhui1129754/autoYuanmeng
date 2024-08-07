@@ -3,9 +3,9 @@ import { PuppeteerCore } from "./puppeteer/core"
 import { OpenCvCore } from "./opencv/core"
 import { WebSocketServer } from 'ws';
 import {
-    go_to_farm,
-    go_to_pasture,
-    go_to_fishpond,
+    goToFarm,
+    goToPasture,
+    goToFishpond,
     runLoop,
     screenshotTxt
 } from "./logic";
@@ -36,17 +36,17 @@ global.wss = null;
         ws.on('message', async function message(data, isBinary) {
             console.log('received: %s', data);
             let obj = JSON.parse(data)
-            if (obj.type == "go_to_farm") {
+            if (obj.type == "goToFarm") {
                 pc.page.bringToFront()
-                await go_to_farm()
-            } else if (obj.type == "go_to_pasture") {
+                await goToFarm()
+            } else if (obj.type == "goToPasture") {
 
                 pc.page.bringToFront()
-                await go_to_pasture()
-            } else if (obj.type == "go_to_fishpond") {
+                await goToPasture()
+            } else if (obj.type == "goToFishpond") {
 
                 pc.page.bringToFront()
-                await go_to_fishpond()
+                await goToFishpond()
             } else if (obj.type == "runLoop") {
                 pc.page.bringToFront()
                 runLoop()
