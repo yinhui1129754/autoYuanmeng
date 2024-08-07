@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import datetime
 import time
-import pyautogui # type: ignore
+import windCall as pyautogui# type: ignore
 
 def get_datetime():
     """获取当前日期和时间"""

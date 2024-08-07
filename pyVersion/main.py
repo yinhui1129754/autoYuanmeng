@@ -1,12 +1,10 @@
 
 import win32gui # type: ignore
 import win32con # type: ignore
-import win32api # type: ignore
+import windCall
 from tool import *
-from windCall import *
 import letsgoFarm
 import threading
-import windCall
 
 def get_all_windows():
     windows_list = []
@@ -58,11 +56,6 @@ def run_letsgoFarm():
 
 
 def btn_farm():
-    windCall.press("k")
-    windCall.press("k")
-    windCall.press("k")
-    windCall.press("k")
-    windCall.press("k")
     print_log("请在3秒内点击游戏画面", "green")
     thread = threading.Thread(target=lambda: go_to_farm())
     thread.daemon = True
@@ -99,7 +92,7 @@ btn_gotopasture = create_button("前往牧场", 2, 1)
 btn_gotopasture.config(command=lambda: btn_pasture())
 btn_gotofishpond = create_button("前往鱼塘", 2, 2)
 btn_gotofishpond.config(command=lambda: btn_fishpond())
-ipt_hwnd = create_input(3,2)
+windCall.ipt_hwnd = create_input(3,2)
 # 创建两个按钮，启动和退出，第四行
 btn_run = create_button("开始挂机", 3, 0)
 btn_run.config(command=lambda: run_letsgoFarm())

@@ -151,16 +151,27 @@ VK_CODE = {
   ']':0xDD,
   "'":0xDE,
   '`':0xC0}
-global ipt_hwnd
-ipt_hwnd: tk.Entry = None
+ipt_hwnd=None
 
 def press(key):
     """按键"""
     if ipt_hwnd is None:
         return
     hwnd = int(ipt_hwnd.get())
+    print(hwnd)
     win32gui.SendMessage(hwnd,win32con.WM_KEYDOWN,VK_CODE[key],0)
     time.sleep(0.1)
     win32gui.SendMessage(hwnd,win32con.WM_KEYUP,VK_CODE[key],0)
-    win32gui.SendMessage(hwnd,win32con.WM_CLOSE,0,0)
+def keyDown(key):
+    """按下按键"""
+    if ipt_hwnd is None:
+        return
+    hwnd = int(ipt_hwnd.get())
+    win32gui.SendMessage(hwnd,win32con.WM_KEYDOWN,VK_CODE[key],0)
     
+def keyUp(key):
+    """松开按键"""
+    if ipt_hwnd is None:
+        return
+    hwnd = int(ipt_hwnd.get())
+    win32gui.SendMessage(hwnd,win32con.WM_KEYUP,VK_CODE[key],0)
