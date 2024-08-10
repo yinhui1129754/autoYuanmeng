@@ -59,9 +59,12 @@ def rest(t):
     """休息"""
     print_log("休息{}秒...".format(t), "red")
     create_progressbar()
+    #132646,264482
     for _ in range(t):
         sleep(1)
-        update_progressbar(100*(_/t))
+        clear_progressbar()
+        update_progressbar(300*float((_+1)/t))
+    clear_progressbar()
     print_log("休息结束", "green")
 
 

@@ -1,6 +1,6 @@
 import os
 from tool import *
-
+import windCall
 
 def open_ymzx():
     """打开元梦"""
@@ -48,23 +48,35 @@ def start():
     # print_log("请在5秒内打开元梦之星")
     # sleep(5)
     while True:
+        if windCall.ipt_hwnd == None:
+            print_log("元梦之星未打开，请在5秒内打开元梦之星")
+            sleep(5)
+            continue
+
+        #132646,264482
         timestamp_start = datetime.datetime.now()
-        # 无人机前往农场工作
-        farm_work()
-        print_log("农场执行完成，休息四十秒")
-        rest(40)
+        hwnds = windCall.ipt_hwnd.get().split(",")
+        for hwnd in hwnds:
+            windCall.use_hwnd = hwnd
+             # 无人机前往农场工作
+            farm_work()
+            print_log("农场执行完成，休息80秒")
+       
+        rest(80)
         # 收获鱼塘
         # fishpond()
         # 识别农场
         # identify_farm()
         # 无人机前往牧场工作
-        pasture_work()
-        print_log("牧场执行完成，休息25秒")
-        rest(25)
+        for hwnd in hwnds:
+            windCall.use_hwnd = hwnd
+            pasture_work()
+        print_log("牧场执行完成，休息50秒")
+        rest(40)
         # 计算耗时
         timestamp_end = datetime.datetime.now()
         computation_time = timestamp_end - timestamp_start
-        t = 120 - computation_time.total_seconds()
+        t = 180 - computation_time.total_seconds()
         print_log(
             "本次任务耗时：{}秒，休息{}秒，".format(
                 round((computation_time).total_seconds(), 2), t

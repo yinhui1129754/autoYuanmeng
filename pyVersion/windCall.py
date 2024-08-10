@@ -154,6 +154,7 @@ VK_CODE = {
   "'":0xDE,
   '`':0xC0}
 ipt_hwnd=None
+use_hwnd=None
 def enum_child_windows(parent):
     """Enumerate all child windows of a given parent window."""
     child_windows = []
@@ -171,16 +172,34 @@ def sendMessage(hwnd,a,b,c):
         win32gui.SendMessage(child,a,b,c)
 def press(key):
     """按键"""
-    if ipt_hwnd is None:
+    if use_hwnd is None:
         return
-    hwnd = int(ipt_hwnd.get())
-    print(ipt_hwnd.get())
-    pythoncom.CoInitialize()
-    shell = win32com.client.Dispatch("WScript.Shell")
-    shell.SendKeys('%')
-    win32gui.SetForegroundWindow(hwnd)
+    hwnds = use_hwnd.split(',')
+    for val in hwnds:
+        hwnd = int(val)
+        pythoncom.CoInitialize()
+        shell = win32com.client.Dispatch("WScript.Shell")
+        shell.SendKeys('%')
+        try:
+            win32gui.SetForegroundWindow(hwnd)
+        except:
+            pass
+        time.sleep(0.3)
+        sendMessage(hwnd,win32con.WM_KEYDOWN,VK_CODE[key],1)
+        time.sleep(0.1)
+        sendMessage(hwnd,win32con.WM_KEYUP,VK_CODE[key],1)
+
+    # hwnd = int()
+    # print(ipt_hwnd.get())
+    # pythoncom.CoInitialize()
+    # shell = win32com.client.Dispatch("WScript.Shell")
+    # shell.SendKeys('%')
+    # win32gui.SetForegroundWindow(hwnd)
     
-    time.sleep(0.1)
+    # time.sleep(0.3)
+    # sendMessage(hwnd,win32con.WM_KEYDOWN,VK_CODE[key],1)
+    # time.sleep(0.1)
+    # sendMessage(hwnd,win32con.WM_KEYUP,VK_CODE[key],1)
     # win32gui.SetWindowPos(
     #     hwnd, 
     #     win32con.HWND_TOPMOST, 
@@ -189,45 +208,54 @@ def press(key):
     # )
     # win32gui.BringWindowToTop(hwnd)
     # win32gui.SetActiveWindow(hwnd)
-    sendMessage(hwnd,win32con.WM_KEYDOWN,VK_CODE[key],1)
-    time.sleep(0.1)
-    sendMessage(hwnd,win32con.WM_KEYUP,VK_CODE[key],1)
+ 
+   
 def keyDown(key):
     """按下按键"""
-    if ipt_hwnd is None:
+    if use_hwnd is None:
         return
-    hwnd = int(ipt_hwnd.get())
-    pythoncom.CoInitialize()
-    shell = win32com.client.Dispatch("WScript.Shell")
-    shell.SendKeys('%')
-    win32gui.SetForegroundWindow(hwnd)
-    time.sleep(0.1)
-    # win32gui.SetWindowPos(
-    #     hwnd, 
-    #     win32con.HWND_TOPMOST, 
-    #     0, 0, 0, 0, 
-    #     win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_SHOWWINDOW
-    # )
-    # win32gui.BringWindowToTop(hwnd)
-    # win32gui.SetActiveWindow(hwnd)
-    sendMessage(hwnd,win32con.WM_KEYDOWN,VK_CODE[key],1)
+    hwnds = use_hwnd.split(',')
+    for val in hwnds:
+        hwnd = int(val)
+        pythoncom.CoInitialize()
+        shell = win32com.client.Dispatch("WScript.Shell")
+        shell.SendKeys('%')
+        try:
+            win32gui.SetForegroundWindow(hwnd)
+        except:
+            pass
+        time.sleep(0.3)
+        # win32gui.SetWindowPos(
+        #     hwnd, 
+        #     win32con.HWND_TOPMOST, 
+        #     0, 0, 0, 0, 
+        #     win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_SHOWWINDOW
+        # )
+        # win32gui.BringWindowToTop(hwnd)
+        # win32gui.SetActiveWindow(hwnd)
+        sendMessage(hwnd,win32con.WM_KEYDOWN,VK_CODE[key],1)
     
 def keyUp(key):
     """松开按键"""
-    if ipt_hwnd is None:
+    if use_hwnd is None:
         return
-    hwnd = int(ipt_hwnd.get())
-    pythoncom.CoInitialize()
-    shell = win32com.client.Dispatch("WScript.Shell")
-    shell.SendKeys('%')
-    win32gui.SetForegroundWindow(hwnd)
-    time.sleep(0.1)
-    # win32gui.SetWindowPos(
-    #     hwnd, 
-    #     win32con.HWND_TOPMOST, 
-    #     0, 0, 0, 0, 
-    #     win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_SHOWWINDOW
-    # )
-    # win32gui.BringWindowToTop(hwnd)
-    # win32gui.SetActiveWindow(hwnd)
-    sendMessage(hwnd,win32con.WM_KEYUP,VK_CODE[key],1)
+    hwnds = use_hwnd.split(',')
+    for val in hwnds:
+        hwnd = int(val)
+        pythoncom.CoInitialize()
+        shell = win32com.client.Dispatch("WScript.Shell")
+        shell.SendKeys('%')
+        try:
+            win32gui.SetForegroundWindow(hwnd)
+        except:
+            pass
+        time.sleep(0.3)
+        # win32gui.SetWindowPos(
+        #     hwnd, 
+        #     win32con.HWND_TOPMOST, 
+        #     0, 0, 0, 0,                       
+        #     win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_SHOWWINDOW
+        # )
+        # win32gui.BringWindowToTop(hwnd)
+        # win32gui.SetActiveWindow(hwnd)
+        sendMessage(hwnd,win32con.WM_KEYUP,VK_CODE[key],1)
