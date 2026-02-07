@@ -1,82 +1,48 @@
-import { utils } from "./utils"
-import { PuppeteerCore } from "./puppeteer/core"
-import { OpenCvCore } from "./opencv/core"
-import { WebSocketServer } from 'ws';
-import {
-    goToFarm,
-    goToPasture,
-    goToFishpond,
-    runLoop,
-    screenshotTxt
-} from "./logic";
-const config = utils.readConfig(utils.getPath("./../config.json"))
-global.config = config
-let pc = new PuppeteerCore();
-let cvc = new OpenCvCore();
-global.pc = pc;
-global.cvc = cvc;
-global.ws = null;
-global.wss = null;
+const { execFile } = require('child_process');
+const path = require('path');
 
+// 配置 ADB 路径（雷电模拟器自带的 ADB 路径）
+const ADB_PATH = 'F:\\install\\leidian\\LDPlayer9\\adb.exe';
 
-
-
-(async () => {
-    // console.log(fB);
-
-
-
-    await pc.createBrowser(config.chromePath);
-    await pc.createPage()
-    await pc.closeFirstPage()
-    const wss = new WebSocketServer({ port: 5964 });
-    wss.on('connection', async function connection(ws) {
-        ws.on('error', console.error);
-
-        ws.on('message', async function message(data, isBinary) {
-            console.log('received: %s', data);
-            let obj = JSON.parse(data)
-            if (obj.type == "goToFarm") {
-                pc.page.bringToFront()
-                await goToFarm()
-            } else if (obj.type == "goToPasture") {
-
-                pc.page.bringToFront()
-                await goToPasture()
-            } else if (obj.type == "goToFishpond") {
-
-                pc.page.bringToFront()
-                await goToFishpond()
-            } else if (obj.type == "runLoop") {
-                pc.page.bringToFront()
-                runLoop()
-            } else if (obj.type == "dblclick") {
-                pc.mouseDblClick(obj.x, obj.y).then(() => {
-                    ws.send("ok");
-                })
+/**
+ * 执行 ADB 命令的通用函数
+ * @param {string[]} args - ADB 命令参数（如 ['connect', '127.0.0.1:5555']）
+ * @returns {Promise<string>} 执行结果
+ */
+function runAdb(args) {
+    return new Promise((resolve, reject) => {
+        execFile(ADB_PATH, args, (error, stdout, stderr) => {
+            if (error) {
+                reject(`ADB 执行失败：${error.message}`);
+                return;
             }
+            if (stderr && !stderr.includes('already connected')) { // 忽略"已连接"的警告
+                reject(`ADB 错误：${stderr}`);
+                return;
+            }
+            resolve(stdout.trim());
         });
-        global.ws = ws;
     });
+}
 
-    global.wss = wss
+// 示例：连接雷电模拟器 + 输入文本
+async function main() {
+    // 1. 连接多开模拟器（端口 5555）
+    await runAdb(['connect', '127.0.0.1:5555']);
 
-    await pc.createConfigPage()
+    // 2. 向模拟器输入文本
+    // await runAdb([
+    //     '-s', '127.0.0.1:5555',
+    //     'shell', 'input', 'text', "'Node.js ADB 测试'"
+    // ]);
 
-    // let txts = await screenshotTxt("./use/btn1.png")
-    // console.log(txts)
-    // console.log(pc.browser)
-    // let img = await pc.screenshot({
-    //     "path": utils.getPath("./aaa.png")
-    // })
-    // let templ = await cvc.readBufferFromFile(utils.getPath("./temp1/btn1.png"))
+    // 3. 模拟点击屏幕（x=500, y=800）
+    await runAdb([
+        '-s', '127.0.0.1:5555',
+        'shell', 'input', 'tap', '500', '800'
+    ]);
 
-    // let rect = await cvc.findImgRect(img, templ)
-    // let img2 = sharp(img)
+    console.log('操作执行完成！');
+}
 
-    // let im = cv.imread(img)
-    // cv.matFromArray(img.height, img.width, cv.CV_8UC4, new Uint8ClampedArray(img.data))
-
-    // console.log(img2)
-})()
-
+main().catch(err => console.error('执行失败：', err));
